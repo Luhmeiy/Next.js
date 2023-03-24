@@ -8,16 +8,16 @@ export default function Navbar() {
 				<Link href="/">Home</Link>
 			</li>
 			<li>
-				<Link href="todos">Todos</Link>
+				<Link href="/todos">Todos</Link>
 			</li>
 			<li>
-				<Link href="products">Produtos</Link>
+				<Link href="/products">Produtos</Link>
 			</li>
 			<li>
-				<Link href="about">Sobre</Link>
+				<Link href="/about">Sobre</Link>
 			</li>
 			<li>
-				<Link href="contact">Contato</Link>
+				<Link href="/contact">Contato</Link>
 			</li>
 		</ul>
 	);

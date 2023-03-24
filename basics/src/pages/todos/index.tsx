@@ -1,4 +1,5 @@
 import styles from "@/styles/Todos.module.scss";
+import Link from "next/link";
 
 interface TodoProps {
 	id: number;
@@ -22,7 +23,10 @@ export default function Todos({ todos }: { todos: TodoProps[] }) {
 
 			<ul className={styles.todolist}>
 				{todos.map((todo) => (
-					<li key={todo.id}>{todo.title}</li>
+					<li key={todo.id}>
+						{todo.title} -{" "}
+						<Link href={`/todos/${todo.id}`}>Ver mais</Link>
+					</li>
 				))}
 			</ul>
 		</>
