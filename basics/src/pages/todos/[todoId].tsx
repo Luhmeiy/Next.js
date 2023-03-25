@@ -1,11 +1,18 @@
 import Link from "next/link";
 
+interface ContextProps {
+	params: {
+		todoId: string;
+	};
+}
+
 interface TodoProps {
 	id: number;
 	title: string;
 }
 
-export async function getStaticProps(context) {
+export async function getStaticProps(context: ContextProps) {
+	console.log(typeof context);
 	const { params } = context;
 
 	const data = await fetch(
