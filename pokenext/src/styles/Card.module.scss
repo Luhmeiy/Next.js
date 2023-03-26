@@ -1,0 +1,46 @@
+.card {
+	align-items: center;
+	background-color: #333;
+	border: 2px solid #e33d33;
+	border-radius: 1em;
+	box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.5);
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-bottom: 2em;
+	padding: 2em 1em;
+	width: 23%;
+
+	& .id {
+		align-items: center;
+		background-color: #e33d33;
+		border-radius: 5px;
+		color: #fff;
+		display: flex;
+		justify-content: center;
+		margin: 1em 0;
+		padding: 5px;
+	}
+
+	& .title {
+		font-size: 1.4em;
+		margin-bottom: 1em;
+		text-transform: capitalize;
+	}
+
+	& .btn {
+		background-color: #fff;
+		border-radius: 5px;
+		color: #222;
+		font-weight: bold;
+		padding: 0.7em 1.2em;
+		text-decoration: none;
+		transition: 0.4s;
+
+		&:hover {
+			background-color: #e33d33;
+			color: #fff;
+		}
+	}
+}
