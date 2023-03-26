@@ -1,0 +1,15 @@
+.about {
+	text-align: center;
+
+	& h1 {
+		font-size: 2em;
+		margin-bottom: 1em;
+	}
+
+	& p {
+		line-height: 1.4;
+		margin-bottom: 1.5em;
+		margin-inline: auto;
+		max-width: 31.25rem;
+	}
+}
