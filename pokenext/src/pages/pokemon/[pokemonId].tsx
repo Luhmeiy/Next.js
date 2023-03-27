@@ -1,6 +1,7 @@
 import { PokemonData } from "@/interfaces/PokemonData";
 import styles from "@/styles/Pokemon.module.scss";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 interface ContextData {
 	params: {
@@ -29,7 +30,7 @@ export const getStaticPaths = async () => {
 
 	return {
 		paths,
-		fallback: false,
+		fallback: true,
 	};
 };
 
@@ -45,6 +46,12 @@ export const getStaticProps = async (context: ContextData) => {
 };
 
 export default function Pokemon({ pokemon }: { pokemon: PokemonData }) {
+	const router = useRouter();
+
+	if (router.isFallback) {
+		return <div>Carregando...</div>;
+	}
+
 	return (
 		<div className={styles.pokemon_container}>
 			<h1 className={styles.title}>{pokemon.name}</h1>
