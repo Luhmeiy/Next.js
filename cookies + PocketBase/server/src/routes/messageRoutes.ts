@@ -5,18 +5,42 @@ interface UserData {
 	sub: string;
 }
 
+interface ItemToFilterData {
+	created: string;
+	updated: string;
+	collectionId: string;
+	collectionName: string;
+}
+
+interface ItemsToFilter extends ItemToFilterData {
+	expand: {
+		user: ItemToFilterData;
+	};
+}
+
 export async function messageRoutes(app: FastifyInstance) {
 	app.addHook("preHandler", async (request) => {
 		await request.jwtVerify();
 	});
 
-	app.get("/", async (request, reply) => {
-		const doc = {
-			title: "messageTitle",
-			text: "messageText",
-		};
+	app.get("/", async (_, reply) => {
+		const messages = await pb.collection("messages").getList(1, 50, {
+			sort: "created",
+			expand: "user",
+			fields: "id,text,expand.user.username,expand.user.id",
+		});
 
-		return reply.code(200).send(doc);
+		const filteredMessages = messages.items.map(
+			({
+				created,
+				updated,
+				collectionId,
+				collectionName,
+				...item
+			}: ItemsToFilter) => item
+		);
+
+		return reply.code(200).send(filteredMessages);
 	});
 
 	app.post(

@@ -17,13 +17,11 @@ interface RequestData {
 
 export async function userRoutes(app: FastifyInstance) {
 	const createToken = (userData: UserData) => {
-		const expirationTime = 7 * 24 * 60 * 60 * 100;
-
 		const token = app.jwt.sign(
-			{ user: userData },
+			{ ...userData },
 			{
 				sub: userData.id,
-				expiresIn: expirationTime,
+				expiresIn: "7 days",
 			}
 		);
 

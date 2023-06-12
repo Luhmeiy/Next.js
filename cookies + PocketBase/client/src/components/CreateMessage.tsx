@@ -2,9 +2,11 @@
 
 import { api } from "@/lib/api";
 import Cookies from "js-cookie";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
 export default function CreateMessage() {
+	const [message, setMessage] = useState("");
+
 	const token = Cookies.get("token");
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -22,18 +24,22 @@ export default function CreateMessage() {
 					Authorization: `Bearer ${token}`,
 				},
 			});
+
+			setMessage("");
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
 	return (
-		<form className="mb-4 flex gap-2" onSubmit={handleSubmit}>
+		<form className="mb-4 flex gap-2 self-center" onSubmit={handleSubmit}>
 			<input
 				type="text"
 				name="message"
 				placeholder="Write a message"
 				className="rounded border-2 border-zinc-500 px-2 py-1"
+				value={message}
+				onChange={(e) => setMessage(e.target.value)}
 			/>
 
 			<button
