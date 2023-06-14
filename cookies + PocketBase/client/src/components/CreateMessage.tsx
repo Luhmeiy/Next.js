@@ -1,21 +1,15 @@
-"use client";
-
+import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { api } from "@/lib/api";
-import Cookies from "js-cookie";
-import { FormEvent, useState } from "react";
 
 export default function CreateMessage() {
-	const [message, setMessage] = useState("");
+	const token = cookies().get("token")?.value;
 
-	const token = Cookies.get("token");
-
-	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-
-		const form = new FormData(e.currentTarget);
+	const handleSubmit = async (data: FormData) => {
+		"use server";
 
 		const messageData = {
-			message: form.get("message") as string,
+			message: data.get("message") as string,
 		};
 
 		try {
@@ -25,21 +19,19 @@ export default function CreateMessage() {
 				},
 			});
 
-			setMessage("");
+			revalidatePath("/messageList");
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
 	return (
-		<form className="mb-4 flex gap-2 self-center" onSubmit={handleSubmit}>
+		<form className="mb-4 flex gap-2 self-center" action={handleSubmit}>
 			<input
 				type="text"
 				name="message"
 				placeholder="Write a message"
 				className="rounded border-2 border-zinc-500 px-2 py-1"
-				value={message}
-				onChange={(e) => setMessage(e.target.value)}
 			/>
 
 			<button

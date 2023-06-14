@@ -1,8 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
-import { useRouter } from "next/navigation";
 
 interface TokenData {
 	id: string;
@@ -20,7 +20,7 @@ export default function UserNav() {
 	const handleSignOut = () => {
 		Cookies.remove("token");
 
-		push("/");
+		push("/login");
 	};
 
 	return (

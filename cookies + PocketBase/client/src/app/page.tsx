@@ -1,26 +1,14 @@
 import { cookies } from "next/headers";
-import Login from "@/app/login/page";
-import { api } from "@/lib/api";
+import { redirect } from "next/navigation";
+import MessageList from "./messageList/page";
 import UserNav from "@/components/UserNav";
 import CreateMessage from "@/components/CreateMessage";
-import { MessageData } from "@/interfaces/MessageData";
 
 export default async function Home() {
-	const isAuthenticated = cookies().has("token");
+	const cookieStore = cookies();
+	const token = cookieStore.get("token")?.value;
 
-	if (!isAuthenticated) {
-		return <Login />;
-	}
-
-	const token = cookies().get("token")?.value;
-
-	const response = await api.get("/messages", {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
-
-	const messages: MessageData[] = response.data;
+	if (!token) redirect("/login");
 
 	return (
 		<div className="flex h-full w-full flex-col rounded bg-white px-6 py-3">
@@ -30,25 +18,7 @@ export default async function Home() {
 				Messages
 			</h1>
 
-			<div className="mb-4 flex flex-1 flex-col justify-end gap-3 overflow-auto">
-				{messages ? (
-					<>
-						{messages.map((message) => {
-							return (
-								<div key={message.id} className="flex flex-col">
-									<span className="text text-xs text-gray-500">
-										{message.expand.user.username}
-									</span>
-									<p>{message.text}</p>
-								</div>
-							);
-						})}
-					</>
-				) : (
-					<p>No messages</p>
-				)}
-			</div>
-
+			<MessageList />
 			<CreateMessage />
 		</div>
 	);

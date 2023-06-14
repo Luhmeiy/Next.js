@@ -1,41 +1,40 @@
-"use client";
-
+import { cookies } from "next/headers";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import { api } from "@/lib/api";
-import Cookie from "js-cookie";
-import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
 
 export default function Register() {
-	const { push } = useRouter();
-
-	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-
-		const form = new FormData(e.currentTarget);
+	const handleSubmit = async (data: FormData) => {
+		"use server";
 
 		const user = {
-			username: form.get("username"),
-			email: form.get("email"),
-			password: form.get("password"),
-			passwordConfirm: form.get("confirmPassword"),
+			username: data.get("username"),
+			email: data.get("email"),
+			password: data.get("password"),
+			passwordConfirm: data.get("confirmPassword"),
 		};
 
 		try {
 			const response = await api.post("/users/register", user);
 
-			Cookie.set("token", response.data, { expires: 7 });
+			const expirationTime = 60 * 60 * 24 * 7;
 
-			push("/");
+			cookies().set("token", response.data, {
+				maxAge: expirationTime,
+				path: "/",
+			});
 		} catch (error) {
 			console.log(error);
 		}
+
+		redirect("/");
 	};
 
 	return (
 		<>
 			<h1 className="mb-4 text-3xl font-bold uppercase">Register</h1>
 
-			<form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+			<form className="mb-4 flex flex-col gap-2" action={handleSubmit}>
 				<input
 					type="text"
 					name="username"
@@ -69,6 +68,13 @@ export default function Register() {
 					Register
 				</button>
 			</form>
+
+			<Link
+				href="/login"
+				className="font-semibold text-blue-400 hover:text-blue-600"
+			>
+				Login
+			</Link>
 		</>
 	);
 }

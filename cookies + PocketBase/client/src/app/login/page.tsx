@@ -1,39 +1,38 @@
-"use client";
-
+import { cookies } from "next/headers";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import { api } from "@/lib/api";
-import Cookie from "js-cookie";
-import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
 
 export default function Login() {
-	const { push } = useRouter();
-
-	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-
-		const form = new FormData(e.currentTarget);
+	const handleSubmit = async (data: FormData) => {
+		"use server";
 
 		const user = {
-			email: form.get("email"),
-			password: form.get("password"),
+			email: data.get("email"),
+			password: data.get("password"),
 		};
 
 		try {
 			const response = await api.post("/users/login", user);
 
-			Cookie.set("token", response.data, { expires: 7 });
+			const expirationTime = 60 * 60 * 24 * 7;
 
-			push("/");
+			cookies().set("token", response.data, {
+				maxAge: expirationTime,
+				path: "/",
+			});
 		} catch (error) {
 			console.log(error);
 		}
+
+		redirect("/");
 	};
 
 	return (
 		<>
 			<h1 className="mb-4 text-3xl font-bold uppercase">Login</h1>
 
-			<form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+			<form className="mb-4 flex flex-col gap-2">
 				<input
 					type="email"
 					name="email"
@@ -49,10 +48,21 @@ export default function Login() {
 					required
 				/>
 
-				<button type="submit" className="rounded bg-green-400 p-2">
+				<button
+					type="submit"
+					className="rounded bg-green-400 p-2 hover:bg-green-500 active:bg-green-300"
+					formAction={handleSubmit}
+				>
 					Login
 				</button>
 			</form>
+
+			<Link
+				href="/register"
+				className="font-semibold text-blue-400 hover:text-blue-600"
+			>
+				Create an account
+			</Link>
 		</>
 	);
 }
