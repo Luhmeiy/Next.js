@@ -28,38 +28,17 @@ export async function userRoutes(app: FastifyInstance) {
 		return token;
 	};
 
-	app.post(
-		"/register",
-		async (request: FastifyRequest<RequestData>, reply) => {
-			const body = request.body;
-			let userData: UserData;
-
-			try {
-				const response = await pb.collection("users").create(body);
-
-				userData = {
-					id: response.id,
-					username: body.username,
-					email: body.email,
-				};
-			} catch (error) {
-				return reply.code(500).send(error);
-			}
-
-			const token = createToken(userData);
-
-			return reply.code(201).send(token);
-		}
-	);
-
-	app.post("/login", async (request: FastifyRequest<RequestData>, reply) => {
-		const body = request.body;
+	const login = async (
+		email: string,
+		password: string,
+		reply: FastifyReply
+	) => {
 		let userData: UserData;
 
 		try {
 			const response = await pb
 				.collection("users")
-				.authWithPassword(body.email, body.password);
+				.authWithPassword(email, password);
 
 			const responseData = response.record;
 
@@ -74,9 +53,28 @@ export async function userRoutes(app: FastifyInstance) {
 
 		const token = createToken(userData);
 
-		app.log.info(token);
-
 		return reply.code(201).send(token);
+	};
+
+	app.post(
+		"/register",
+		async (request: FastifyRequest<RequestData>, reply) => {
+			const body = request.body;
+
+			try {
+				await pb.collection("users").create(body);
+
+				await login(body.email, body.password, reply);
+			} catch (error) {
+				return reply.code(500).send(error);
+			}
+		}
+	);
+
+	app.post("/login", async (request: FastifyRequest<RequestData>, reply) => {
+		const body = request.body;
+
+		await login(body.email, body.password, reply);
 	});
 
 	app.log.info("User routes registered");
