@@ -64,14 +64,17 @@ export default function Register() {
 					required
 				/>
 
-				<button type="submit" className="rounded bg-green-400 p-2">
+				<button
+					type="submit"
+					className="rounded bg-green-400 p-2 transition-colors duration-500 hover:bg-green-500 active:bg-green-300"
+				>
 					Register
 				</button>
 			</form>
 
 			<Link
 				href="/login"
-				className="font-semibold text-blue-400 hover:text-blue-600"
+				className="font-semibold text-blue-400 transition-colors duration-500 hover:text-blue-600"
 			>
 				Login
 			</Link>

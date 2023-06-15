@@ -3,12 +3,7 @@
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
-
-interface TokenData {
-	id: string;
-	username: string;
-	email: string;
-}
+import { TokenData } from "@/interfaces/TokenData";
 
 export default function UserNav() {
 	const { push } = useRouter();
@@ -30,7 +25,7 @@ export default function UserNav() {
 					<p>Welcome, {tokenData.username}</p>
 					<p
 						onClick={handleSignOut}
-						className="cursor-pointer font-bold text-blue-400 hover:text-blue-500"
+						className="cursor-pointer font-bold text-blue-400 transition-colors duration-500 hover:text-blue-500"
 					>
 						Sign Out
 					</p>

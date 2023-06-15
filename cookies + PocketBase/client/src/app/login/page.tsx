@@ -50,7 +50,7 @@ export default function Login() {
 
 				<button
 					type="submit"
-					className="rounded bg-green-400 p-2 hover:bg-green-500 active:bg-green-300"
+					className="rounded bg-green-400 p-2 transition-colors duration-500 hover:bg-green-500 active:bg-green-300"
 					formAction={handleSubmit}
 				>
 					Login
@@ -59,7 +59,7 @@ export default function Login() {
 
 			<Link
 				href="/register"
-				className="font-semibold text-blue-400 hover:text-blue-600"
+				className="font-semibold text-blue-400 transition-colors duration-500 hover:text-blue-600"
 			>
 				Create an account
 			</Link>

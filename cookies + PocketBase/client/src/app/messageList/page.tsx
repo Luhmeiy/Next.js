@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import { MessageData } from "@/interfaces/MessageData";
 import { api } from "@/lib/api";
+import jwtDecode from "jwt-decode";
+import { TokenData } from "@/interfaces/TokenData";
 
 export default async function MessageList() {
 	const token = cookies().get("token")?.value;
@@ -11,15 +13,23 @@ export default async function MessageList() {
 		},
 	});
 
-	const messages: MessageData[] = response.data;
+	const tokenData: TokenData = jwtDecode(token!);
+
+	const messages: MessageData[] = response.data.reverse();
 
 	return (
-		<div className="mb-4 flex flex-1 flex-col justify-end gap-3 overflow-auto">
+		<div className="mb-4 mt-auto flex flex-1 flex-col-reverse gap-3 overflow-auto">
 			{messages ? (
 				<>
 					{messages.map((message) => {
 						return (
-							<div key={message.id} className="flex flex-col">
+							<div
+								key={message.id}
+								className={`flex flex-col ${
+									message.expand.user.id === tokenData.id &&
+									"mr-2 items-end self-end"
+								}`}
+							>
 								<span className="text text-xs text-gray-500">
 									{message.expand.user.username}
 								</span>

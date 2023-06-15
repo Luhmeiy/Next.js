@@ -1,42 +1,31 @@
-import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
-import { api } from "@/lib/api";
+"use client";
+
+import { useState } from "react";
+import { handleSubmit } from "@/utils/handleSubmit";
 
 export default function CreateMessage() {
-	const token = cookies().get("token")?.value;
+	const [message, setMessage] = useState("");
 
-	const handleSubmit = async (data: FormData) => {
-		"use server";
+	const middleware = async (data: FormData) => {
+		await handleSubmit(data);
 
-		const messageData = {
-			message: data.get("message") as string,
-		};
-
-		try {
-			await api.post("/messages", messageData, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
-
-			revalidatePath("/messageList");
-		} catch (error) {
-			console.log(error);
-		}
+		setMessage("");
 	};
 
 	return (
-		<form className="mb-4 flex gap-2 self-center" action={handleSubmit}>
+		<form className="mb-4 flex gap-2 self-center" action={middleware}>
 			<input
 				type="text"
 				name="message"
 				placeholder="Write a message"
 				className="rounded border-2 border-zinc-500 px-2 py-1"
+				value={message}
+				onChange={(e) => setMessage(e.target.value)}
 			/>
 
 			<button
 				type="submit"
-				className="rounded bg-green-400 px-4 py-2 hover:bg-green-500 active:bg-green-300"
+				className="rounded bg-green-400 px-4 py-2 transition-colors duration-500 hover:bg-green-500 active:bg-green-300"
 			>
 				Post
 			</button>
