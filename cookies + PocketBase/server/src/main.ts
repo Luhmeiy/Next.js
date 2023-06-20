@@ -3,6 +3,7 @@ import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
 import "dotenv/config";
 
+import { authRoutes } from "./routes/authRoutes";
 import { userRoutes } from "./routes/userRoutes";
 import { messageRoutes } from "./routes/messageRoutes";
 
@@ -15,6 +16,7 @@ app.register(cors, {
 });
 app.register(jwt, { secret: process.env.JWT_SECRET! });
 
+app.register(authRoutes, { prefix: "/auth" });
 app.register(userRoutes, { prefix: "/users" });
 app.register(messageRoutes, { prefix: "/messages" });
 

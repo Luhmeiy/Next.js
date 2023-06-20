@@ -3,12 +3,20 @@ import { redirect } from "next/navigation";
 import MessageList from "./messageList/page";
 import UserNav from "@/components/UserNav";
 import CreateMessage from "@/components/CreateMessage";
+import { api } from "@/lib/api";
 
 export default async function Home() {
-	const cookieStore = cookies();
-	const token = cookieStore.get("token")?.value;
+	const token = cookies().get("token")?.value;
 
 	if (!token) redirect("/login");
+
+	const response = (await api.get("/auth", {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	})) as { data: { ok: boolean } };
+
+	if (!response.data.ok) redirect("/login");
 
 	return (
 		<div className="flex h-full w-full flex-col rounded bg-white px-6 py-3">

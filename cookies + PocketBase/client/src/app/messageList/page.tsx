@@ -27,7 +27,7 @@ export default async function MessageList() {
 								key={message.id}
 								className={`flex flex-col ${
 									message.expand.user.id === tokenData.id &&
-									"mr-2 items-end self-end"
+									"mr-2 self-end text-end"
 								}`}
 							>
 								<span className="text text-xs text-gray-500">
