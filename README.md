@@ -13,3 +13,7 @@ Developed during [Curso de Next.js](https://www.youtube.com/playlist?list=PLnDvR
 
 -   basics
 -   pokenext
+
+Developed during [Full Stack Spotify Clone: Next 13.4, React, Stripe, Supabase, PostgreSQL, Tailwind (2023)](https://www.youtube.com/watch?v=2aeMRB8LL4o) by [Code With Antonio](https://www.youtube.com/@codewithantonio):
+
+-   spotify-clone
